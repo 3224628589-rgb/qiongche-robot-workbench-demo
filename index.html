@@ -12,6 +12,25 @@ main{max-width:1920px;margin:auto;padding:16px 16px 0}.panel{background:var(--pa
 .tools{display:flex;align-items:center;flex-wrap:wrap;gap:7px;color:var(--soft);font-size:12px;padding:13px 0 16px}.tools button{font-size:12px;padding:4px 7px}.tools [aria-pressed=true]{border-color:#5baca0;color:var(--accent);background:#ecf8f5}.toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%);background:#163a3b;color:white;border-radius:9px;padding:10px 15px;z-index:5;max-width:calc(100vw - 28px);box-shadow:0 5px 15px #05232330}.toast[data-kind=error]{background:#7e2d38}dialog{color:var(--ink);border:0;border-radius:13px;max-width:min(92vw,550px);padding:24px}dialog h2{margin:0 0 10px}dialog::backdrop{background:#0d202b82}.modal-actions,.lightbox-top{display:flex;gap:9px;align-items:center;justify-content:flex-end;margin-top:16px}.lightbox{max-width:94vw;max-height:93vh;width:min(1120px,94vw);padding:14px}.lightbox-top{justify-content:space-between;margin:0 0 10px}.lightbox img{width:100%;max-height:78vh;object-fit:contain;display:block}
 @media(max-width:1180px){.filters{grid-template-columns:repeat(4,minmax(0,1fr))}.filters .views{max-width:220px}.evidence{grid-template-columns:minmax(180px,27fr) minmax(0,56fr) minmax(145px,17fr);gap:11px}.detail-identity h1{font-size:22px}.product-meta{margin-left:0}.candidates{gap:6px}.actions h2{font-size:15px}.actions{gap:8px}.queue-panel{min-height:0}.big-timer{font-size:28px}}
 @media(max-width:760px){.masthead{padding:0 12px;height:58px}.brand strong{font-size:15px}.operator{font-size:10px;gap:4px}.operator span{padding:0}.brand-icon{width:27px;height:27px;font-size:16px}main{padding:8px 8px 0}.panel{padding:12px}.filters{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}.views{grid-column:1/-1;width:210px}.task-card{width:260px;flex-basis:260px}.detail-head{gap:5px;flex-wrap:wrap}.detail-identity h1{font-size:18px}.rx{font-size:16px;padding:3px 12px}.product-meta{font-size:11px}.big-timer{font-size:19px;padding:3px 9px}.evidence{grid-template-columns:minmax(85px,1fr) minmax(0,2.2fr)}.actions{grid-column:1/-1}.candidates{grid-template-columns:repeat(8,minmax(0,1fr))}.detail{min-height:0}.queue-panel.expanded-queue{min-height:70vh}}
+.cards.card-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,309px));
+  justify-content:space-between;
+  align-content:start;
+  gap:10px 16px;
+  min-height:0;
+  max-height:max(180px,calc(100dvh - 222px));
+  overflow:hidden auto;
+  overscroll-behavior:contain;
+}
+.card-grid .task-card{width:100%;min-width:0}
+@media(max-width:1180px){
+  .cards.card-grid{grid-template-columns:repeat(3,minmax(0,309px));max-height:max(180px,calc(100dvh - 280px))}
+}
+@media(max-width:760px){
+  .cards.card-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:max(180px,calc(100dvh - 330px))}
+}
+@media(max-width:480px){.cards.card-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -115,6 +134,14 @@ function previousRecords() {
     { ...story[0], id: 'TASK-794-01', channel: '京东', order: '2631180000007013', serial: '13', status: 'timeout', requestedAt: lastNight(22, 48) },
     { ...story[0], id: 'TASK-789-01', order: '2631170000007021', serial: '21', picked: [1, 13], status: 'accepted', requestedAt: lastNight(23, 22, -2), older: true }
   ];
+  const channels = ['淘宝', '美团', '京东'];
+  for (let i = 0; i < 15; i++) {
+    records.push({
+      ...second, id: 'TASK-LOG-' + (i + 1), channel: channels[i % channels.length],
+      order: String(2631180000007200 + i), serial: String(120 + i),
+      status: 'timeout', requestedAt: lastNight(22, 44 - i * 2)
+    });
+  }
   for (const row of records) {
     state.tasks.set(row.id, {
       ...base, ...row, deadline: row.requestedAt + waitMs, lastNight: !row.older,
@@ -130,7 +157,7 @@ function reset() {
   const mode = new URLSearchParams(location.search).get('mode') === 'day' ? 'day' : 'night';
   state = {
     mode, view: 'current', selected: null, tasks: new Map(), drafts: new Map(), photos: new Map(),
-    range: {}, nextMock: 0, collapsed: false
+    range: {}, nextMock: 0, collapsed: false, railOffset: 0, gridOffset: 0
   };
   $('filters').reset();
   previousRecords();
@@ -138,7 +165,7 @@ function reset() {
   ingest(story[0], now);
   ingest(second, now - 14_000);
   notification('');
-  render();
+  render({ resetScroll: true });
 }
 function chosen(row) { return row.picked ?? state.drafts.get(row.id) ?? []; }
 function remaining(ms) {
@@ -179,12 +206,16 @@ function visibleRows() {
   if (state.mode === 'day' || state.view === 'all') rows.sort((a, b) => b.requestedAt - a.requestedAt);
   return rows;
 }
-function render({ reveal = false } = {}) {
+function render({ reveal = false, resetScroll = false } = {}) {
   const list = $('cards');
-  const scroll = list.scrollLeft;
+  if (!resetScroll) {
+    if (list.classList.contains('card-grid')) state.gridOffset = list.scrollTop;
+    else state.railOffset = list.scrollLeft;
+  }
   const rows = visibleRows();
   if (state.selected && !rows.some(row => row.id === state.selected)) state.selected = null;
   if (!state.selected && !state.collapsed) state.selected = rows[0]?.id ?? null;
+  const showGrid = !state.selected;
   document.documentElement.dataset.mode = state.mode;
   $('heading').textContent = state.mode === 'night' ? '夜深了，感谢你的辛苦付出' : '机器人工作台.白天模式';
   const banner = state.mode === 'night' ? assets.nightBanner : assets.dayBanner;
@@ -193,12 +224,15 @@ function render({ reveal = false } = {}) {
   $('current-view').setAttribute('aria-pressed', state.view === 'current');
   $('all-history').setAttribute('aria-pressed', state.view === 'all');
   document.querySelectorAll('.tools [data-mode]').forEach(button => button.setAttribute('aria-pressed', button.dataset.mode === state.mode));
-  $('queue-panel').classList.toggle('expanded-queue', !state.selected);
+  $('queue-panel').classList.toggle('expanded-queue', showGrid);
   $('queue-empty').hidden = rows.length > 0;
   $('queue-empty').textContent = '当前没有符合条件的任务';
   list.hidden = !rows.length;
+  list.classList.toggle('card-grid', showGrid);
+  list.setAttribute('aria-label', showGrid ? '纵向任务列表' : '横向任务列表');
   list.innerHTML = rows.map(card).join('');
-  list.scrollLeft = scroll;
+  list.scrollLeft = showGrid ? 0 : state.railOffset;
+  list.scrollTop = showGrid ? state.gridOffset : 0;
   const active = reveal && list.querySelector('.selected');
   if (active) {
     const card = active.getBoundingClientRect();
@@ -268,9 +302,10 @@ function switchView(view, mode = state.mode) {
   state.view = view;
   state.selected = null;
   state.collapsed = false;
-  $('cards').scrollLeft = 0;
+  state.railOffset = 0;
+  state.gridOffset = 0;
   notification('');
-  render();
+  render({ resetScroll: true });
 }
 function finish(row, status, by = '当前主控') {
   if (row.status !== 'pending') return;
@@ -357,8 +392,9 @@ $('cards').onclick = event => {
     state.selected = button.dataset.select; state.collapsed = false;
   }
   notification('');
-  render();
+  render({ reveal: Boolean(button.dataset.select) });
   if (button.dataset.select) $('cards').querySelector(`[data-select="${button.dataset.select}"]`)?.focus({ preventScroll: true });
+  else if (button.id === 'collapse') $('cards').focus({ preventScroll: true });
 };
 $('detail').onclick = event => {
   const button = event.target.closest('button');
