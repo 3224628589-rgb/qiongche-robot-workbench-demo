@@ -4,20 +4,176 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>机器人工作台 · WSMS</title>
-<style>:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;color:#152e32;background:#f3f6f6;font-size:14px;line-height:1.45;--ink:#152e32;--sub:#526e74;--soft:#637d84;--panel:#fff;--border:#d9e3e3;--field:#cedbde;--accent:#086f66;--teal-soft:#e7f4f1;--photo:#eef4f2;--warning:#a33d43}
-*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.45}button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid #249d90;outline-offset:2px}button{background:#fff;border:1px solid var(--field);border-radius:6px;padding:6px 12px}button:not(:disabled):hover{border-color:#4da69f}input,select{width:100%;min-width:0;height:34px;border:1px solid var(--field);border-radius:6px;background:#fff;padding:0 9px}input::placeholder{color:var(--soft)}[hidden]{display:none!important}.primary{background:var(--accent);border-color:var(--accent);color:#fff}.danger{color:var(--warning)}.masthead{height:68px;display:flex;position:relative;align-items:center;justify-content:space-between;gap:20px;padding:0 3.4%;isolation:isolate;overflow:hidden;background:#142c31;color:#f7fcfd}.banner{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:-1}.brand,.operator{display:flex;align-items:center;gap:10px;white-space:nowrap}.brand strong{font-size:20px;font-weight:700}.brand-icon{display:none;place-items:center;width:36px;height:36px;background:#abeee4;color:#1e6661;border-radius:8px;font-size:23px;font-weight:700}.operator{font-size:14px}.operator span{opacity:.6;padding:0 5px}[data-mode=day] .masthead{background:#d9efed;color:#163639}[data-mode=day] .brand-icon{display:grid}
-main{max-width:1920px;margin:auto;padding:16px 16px 0}.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:21px}.queue-panel{min-height:277px;display:flex;flex-direction:column;gap:19px}.queue-panel.expanded-queue{min-height:calc(100vh - 112px)}.filters{display:grid;grid-template-columns:185fr 114fr 170fr 124fr 191fr 202fr 266fr;column-gap:14px;row-gap:10px;align-items:end;margin:0 0 3px;min-height:56px}.filters label,.time-field>label,.range-panel label{color:var(--sub);font-size:12px;display:grid;gap:4px;font-weight:500}.filters label input,.filters label select,.range-trigger{color:var(--ink);font-size:13px;font-weight:400}.views{display:flex;height:34px;border:1px solid var(--field);border-radius:7px;padding:3px;gap:3px;background:#f1f5f5}.views button{border:0;padding:0 4px;flex:1;background:none;font-size:13px;white-space:nowrap;color:var(--sub)}.views [aria-pressed=true]{background:#dff1ec;color:var(--accent);font-weight:700}.search-field,.time-field{position:relative;min-width:0}.search-field input{padding-right:28px}.search-field .icon{position:absolute;right:10px;top:9px;pointer-events:none}.icon{width:15px;height:15px;position:relative;display:inline-block;flex:none;color:var(--sub)}.search-icon:before{content:"";position:absolute;width:8px;height:8px;left:1px;top:1px;border:1.4px solid currentColor;border-radius:50%}.search-icon:after{content:"";position:absolute;width:5px;height:1.4px;left:9px;top:11px;transform:rotate(45deg);background:currentColor}.calendar-icon:before{content:"";position:absolute;width:11px;height:10px;left:1px;top:3px;border:1.4px solid currentColor;border-radius:2px}.calendar-icon:after{content:"";position:absolute;width:10px;border-top:1.4px solid currentColor;left:2px;top:6px}.range-trigger{height:34px;width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:7px;padding:0 9px;color:var(--sub);white-space:nowrap}.range-trigger span:first-child{overflow:hidden;text-overflow:ellipsis}.range-panel{position:fixed;margin:0;width:min(330px,calc(100vw - 20px));padding:14px;border:1px solid var(--border);border-radius:9px;background:#fff;color:var(--ink);box-shadow:0 10px 35px #12384026}.range-panel label{margin-top:9px}.range-panel input{font-size:13px}.range-panel p{color:var(--warning);margin:5px 0}.range-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:10px}
-.cards{display:flex;gap:8px;overflow-x:auto;min-height:155px;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#abcac5 transparent;padding:0 1px 2px}.task-card{width:309px;min-height:155px;flex:0 0 309px;position:relative;border:1px solid #81cfc5;border-radius:7px;background:#fff;display:flex;flex-direction:column;align-items:stretch;text-align:left;padding:15px;gap:5px;color:var(--ink)}.task-card.selected{border-color:#218f85;background:var(--teal-soft)}.card-open{position:absolute;inset:0;border:0;border-radius:7px;background:transparent;padding:0;color:transparent;font-size:0}.card-open:hover{box-shadow:inset 0 0 0 1px #5fb2a8}.card-top{display:flex;align-items:center;gap:5px;margin-bottom:1px}.badge{display:inline-flex;align-items:center;gap:3px;border-radius:4px;padding:3px 6px;line-height:1.25;white-space:nowrap;font-size:12px;font-weight:650;background:#dcebf0;color:#203d72}.platform[data-channel=美团]{background:#ffdc24;color:#151b19}.platform[data-channel=淘宝]{background:#0769f5;color:white}.platform[data-channel=京东]{background:#b2273a;color:white}.card-status{margin-left:auto}.expired{background:#ecf4c9;color:#6e520b}.denied{background:#fde6e6;color:#8d2833}.accepted{background:#e3f1ee;color:#27685e}.card-store{font-weight:700;font-size:12px;margin:1px 0}.card-line{font-size:11px;color:#43666c;line-height:1.4;margin:0;display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.card-collapse{color:#006ce2;position:relative;z-index:1;align-self:center;font-size:12px;font-weight:650;padding:3px 5px 0;margin-top:auto;border:0;background:none}.empty{padding:20px 4px;color:var(--sub);font-size:14px}
-.detail{margin-top:9px;min-height:546px}.detail-head{min-height:49px;display:flex;gap:14px;align-items:center;margin:0 0 12px}.detail-identity{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}.detail-identity h1{font-size:26px;margin:0;line-height:1.3}.rx{font-size:21px;font-weight:700;line-height:1.15;color:white;background:#ef1820;padding:3px 20px;border-radius:25px}.product-meta{font-size:14px;color:var(--soft);margin-left:14px}.big-timer{margin-left:auto;display:flex;align-items:center;gap:5px;color:#142455;background:#d8e8ee;border-radius:11px;padding:4px 12px;font-weight:700;font-size:34px;line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}.big-timer.urgent{color:#7b321f;background:#fbe7d7}.evidence{display:grid;grid-template-columns:minmax(0,372fr) minmax(0,776fr) minmax(150px,172fr);gap:19px;align-items:start}.product-pane{display:grid;gap:12px;min-width:0}.photo{background:var(--photo);display:block;padding:0;border:0;overflow:hidden;border-radius:14px;width:100%}.photo img{width:100%;height:100%;display:block;object-fit:cover}.product-photo{aspect-ratio:1}.scene-photo{aspect-ratio:776 / 437}.scene-photo img{object-fit:cover}.matching-photo{background:#e6e9e5}.matching-photo img{object-fit:contain}.thumbs{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap}.thumb{padding:0;overflow:hidden;width:min(52px,18%);aspect-ratio:1;border:1px solid #d6e1e1;border-radius:7px;background:#f6f8f8}.thumb[aria-pressed=true]{border-color:#1d9687;box-shadow:0 0 0 1px #1d9687}.thumb img{width:100%;height:100%;display:block;object-fit:cover}.actions{display:flex;flex-direction:column;gap:12px;min-width:0}.actions h2{font-size:17px;line-height:1.32;margin:0;overflow-wrap:anywhere}.actions strong.location{color:#c92c34}.candidates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:0 3px}.candidate{border:1px solid var(--field);padding:0;height:32px;font-size:14px;min-width:0}.candidate[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}.candidate:disabled{opacity:1;cursor:default}.actions button.primary,.actions button.danger{width:100%;min-height:40px}.chosen-order{font-size:12px;color:var(--sub);margin:0}.result{color:var(--accent);font-size:17px;font-weight:700;margin:1px 0;text-align:center}.result.expired-text{color:#7e540b}.result.rejected-text{color:var(--warning)}.scan-data{font-size:13px;line-height:1.5;display:grid;gap:10px}.scan-data b{font-weight:700}.scan-data .code{color:#bd2935;display:block;font-weight:650;overflow-wrap:anywhere}.trace-block{background:#e3f1ef;padding:9px 10px;border-radius:7px;color:#47636a;font-size:12px;overflow-wrap:anywhere}.history-meta{color:var(--sub);font-size:12px;line-height:1.5;overflow-wrap:anywhere}
-.tools{display:flex;align-items:center;flex-wrap:wrap;gap:7px;color:var(--soft);font-size:12px;padding:13px 0 16px}.tools button{font-size:12px;padding:4px 7px}.tools [aria-pressed=true]{border-color:#5baca0;color:var(--accent);background:#ecf8f5}.toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%);background:#163a3b;color:white;border-radius:9px;padding:10px 15px;z-index:5;max-width:calc(100vw - 28px);box-shadow:0 5px 15px #05232330}.toast[data-kind=error]{background:#7e2d38}dialog{color:var(--ink);border:0;border-radius:13px;max-width:min(92vw,550px);padding:24px}dialog h2{margin:0 0 10px}dialog::backdrop{background:#0d202b82}.modal-actions,.lightbox-top{display:flex;gap:9px;align-items:center;justify-content:flex-end;margin-top:16px}.lightbox{max-width:94vw;max-height:93vh;width:min(1120px,94vw);padding:14px}.lightbox-top{justify-content:space-between;margin:0 0 10px}.lightbox img{width:100%;max-height:78vh;object-fit:contain;display:block}
-@media(max-width:1180px){.filters{grid-template-columns:repeat(4,minmax(0,1fr))}.filters .views{max-width:220px}.evidence{grid-template-columns:minmax(180px,27fr) minmax(0,56fr) minmax(145px,17fr);gap:11px}.detail-identity h1{font-size:22px}.product-meta{margin-left:0}.candidates{gap:6px}.actions h2{font-size:15px}.actions{gap:8px}.queue-panel{min-height:0}.big-timer{font-size:28px}}
-@media(max-width:760px){.masthead{padding:0 12px;height:58px}.brand strong{font-size:15px}.operator{font-size:10px;gap:4px}.operator span{padding:0}.brand-icon{width:27px;height:27px;font-size:16px}main{padding:8px 8px 0}.panel{padding:12px}.filters{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}.views{grid-column:1/-1;width:210px}.task-card{width:260px;flex-basis:260px}.detail-head{gap:5px;flex-wrap:wrap}.detail-identity h1{font-size:18px}.rx{font-size:16px;padding:3px 12px}.product-meta{font-size:11px}.big-timer{font-size:19px;padding:3px 9px}.evidence{grid-template-columns:minmax(85px,1fr) minmax(0,2.2fr)}.actions{grid-column:1/-1}.candidates{grid-template-columns:repeat(8,minmax(0,1fr))}.detail{min-height:0}.queue-panel.expanded-queue{min-height:70vh}}
+<style>:root{font:14px/20px "PingFang TC","PingFang SC","Microsoft YaHei",sans-serif;color:#111817;background:#89c1af;--ink:#111817;--sub:#58625e;--soft:#58625e;--panel:#fff;--border:#e0e3e1;--field:#d1d7d3;--accent:#087647;--teal-soft:#e8f4ed;--photo:#f2f2f2;--warning:#a72e39;--display:"Alimama ShuHeiTi","阿里妈妈数黑体","PingFang TC",sans-serif}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:1920px;padding:21px 15px 0}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.45}
+button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid #249d90;outline-offset:2px}
+button{background:#fff;border:1px solid var(--field);border-radius:6px;padding:6px 12px}
+button:not(:disabled):hover{border-color:#4da69f}
+input,select{width:100%;min-width:0;height:34px;border:1px solid var(--field);border-radius:6px;background:#fff;padding:0 9px}
+input::placeholder{color:var(--soft)}
+[hidden]{display:none!important}
+.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.danger{color:var(--warning)}
+.masthead{height:59px;display:flex;position:relative;align-items:center;justify-content:space-between;gap:20px;padding:0 24px;isolation:isolate;overflow:hidden;border-radius:32px;background:linear-gradient(100deg,#233748,#4d7464,#294e47);color:white}
+.banner{width:min(412px,52%);height:100%;object-fit:cover;object-position:center;position:absolute;top:0;left:0;z-index:-1;border-radius:32px}
+.brand,.operator{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand strong{font-size:20px;font-weight:700}
+.operator{font-size:14px}
+.operator span{opacity:.6;padding:0 5px}
+[data-mode=day] .masthead{background:linear-gradient(100deg,#294e47,#4d7464,#294e47);color:white}
+main{margin:16px auto 0}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px}
+.queue-panel{min-height:calc(100dvh - 107px);display:flex;flex-direction:column;gap:12px}
+.queue-panel.expanded-queue{min-height:calc(100dvh - 107px)}
+.filters{display:grid;width:min(100%,1324px);grid-template-columns:minmax(0,185fr) minmax(0,170fr) minmax(0,114fr) minmax(0,124fr) minmax(0,191fr) minmax(0,202fr) minmax(0,266fr);gap:8px 12px;align-items:end;min-height:56px}
+.filters label,.time-field>label,.range-panel label{color:var(--sub);font-size:12px;display:grid;gap:4px;font-weight:500}
+.filters label input,.filters label select,.range-trigger{color:var(--ink);font-size:14px;font-weight:400}
+.views{display:flex;align-items:center;height:56px;border:1px solid var(--field);border-radius:7px;padding:3px;gap:3px;background:#f2f2f2}
+.views button{border:0;padding:0 4px;flex:1;background:none;font-size:14px;white-space:nowrap;color:var(--sub)}
+.views [aria-pressed=true]{background:#0b6e65;color:#fff;font-weight:600;height:43px}
+.search-field,.time-field{position:relative;min-width:0}
+.search-field input{padding-right:28px}
+.search-field .icon{position:absolute;right:10px;top:9px;pointer-events:none}
+.icon{width:15px;height:15px;position:relative;display:inline-block;flex:none;color:var(--sub)}
+.search-icon:before{content:"";position:absolute;width:8px;height:8px;left:1px;top:1px;border:1.4px solid currentColor;border-radius:50%}
+.search-icon:after{content:"";position:absolute;width:5px;height:1.4px;left:9px;top:11px;transform:rotate(45deg);background:currentColor}
+.calendar-icon:before{content:"";position:absolute;width:11px;height:10px;left:1px;top:3px;border:1.4px solid currentColor;border-radius:2px}
+.calendar-icon:after{content:"";position:absolute;width:10px;border-top:1.4px solid currentColor;left:2px;top:6px}
+.range-trigger{height:34px;width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:7px;padding:0 9px;color:var(--sub);white-space:nowrap}
+.range-trigger span:first-child{overflow:hidden;text-overflow:ellipsis}
+.range-panel{position:fixed;margin:0;width:min(378px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow:auto;padding:16px;border:1px solid var(--border);border-radius:12px;background:#fff;color:var(--ink);box-shadow:0 10px 35px #12384026}
+.range-panel label{margin-top:9px}
+.range-panel input{font-size:14px}
+.range-panel p{color:var(--warning);margin:5px 0}
+.range-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:10px}
+.cards{display:flex;gap:21px;overflow-x:auto;min-height:148px;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#8ebda9 transparent}
+.task-card{width:309px;height:148px;flex:0 0 309px;position:relative;border:1px solid var(--border);border-radius:6px;background:#fff;display:flex;flex-direction:column;align-items:stretch;text-align:left;padding:16px;color:var(--ink);min-width:0}
+.task-card.selected{border-color:#108652;background:var(--teal-soft)}
+.card-open{position:absolute;inset:0;border:0;border-radius:7px;background:transparent;padding:0;color:transparent;font-size:0}
+.card-open:hover{box-shadow:inset 0 0 0 1px #5fb2a8}
+.card-top{display:flex;align-items:center;gap:6px;margin-bottom:8px;min-height:26px}
+.badge{display:inline-flex;align-items:center;gap:3px;border-radius:4px;padding:3px 7px;line-height:18px;white-space:nowrap;font-size:12px;font-weight:500;background:var(--teal-soft);color:var(--accent)}
+.platform[data-channel=美团]{background:#ead300;color:#000}
+.platform[data-channel=淘宝]{background:#006fff;color:white}
+.platform[data-channel=京东]{background:#b2273a;color:white}
+.card-status{margin-left:auto}
+.expired{background:#fff1cc;color:#704b08}
+.denied{background:#fde6e6;color:#8d2833}
+.accepted{background:#e3f1ee;color:#27685e}
+.card-store{font-weight:600;font-size:14px;line-height:20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-line{font-size:12px;color:var(--sub);line-height:18px;display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.card-collapse{color:var(--accent);position:relative;z-index:1;align-self:center;font-size:14px;line-height:20px;font-family:inherit;font-weight:600;padding:0 5px;margin-top:auto;border:0;background:none}
+.empty{padding:20px 4px;color:var(--sub);font-size:14px}
+.detail{border-top:2px dashed #5d747b;padding-top:12px}
+.detail-head{min-height:49px;display:flex;gap:12px;align-items:center;margin:0 0 12px;padding:0 4px}
+.detail-identity{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.detail-identity h1{font:700 26px/34px var(--display);margin:0}
+.rx{display:inline-grid;place-items:center;min-width:84px;height:37px;color:white;background:var(--warning);border-radius:24px;font:700 26px/34px var(--display)}
+.product-meta{font-size:14px;color:var(--soft);margin-left:14px}
+.rx[data-class="OTC"]{background:var(--accent)}
+.big-timer{margin-left:auto;display:flex;align-items:center;gap:5px;color:var(--accent);background:var(--teal-soft);border-radius:8px;padding:4px 8px;font:700 32px/40px var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.big-timer.urgent{color:#7b321f;background:#fbe7d7}
+.evidence{display:grid;grid-template-columns:minmax(0,372fr) minmax(0,776fr) minmax(150px,172fr);max-width:1360px;gap:20px;align-items:end}
+.product-pane{display:grid;gap:12px;min-width:0}
+.photo{background:var(--photo);display:block;padding:0;border:0;overflow:hidden;border-radius:14px;width:100%}
+.photo img{width:100%;height:100%;display:block;object-fit:cover}
+.product-photo{aspect-ratio:1}
+.scene-photo{aspect-ratio:776 / 437}
+.scene-photo img{object-fit:cover}
+.matching-photo{background:#e6e9e5}
+.matching-photo img{object-fit:contain}
+.thumbs{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap}
+.thumb{padding:0;overflow:hidden;width:min(52px,18%);aspect-ratio:1;border:1px solid #d6e1e1;border-radius:7px;background:#f6f8f8}
+.thumb[aria-pressed=true]{border-color:#1d9687;box-shadow:0 0 0 1px #1d9687}
+.thumb img{width:100%;height:100%;display:block;object-fit:cover}
+.actions{display:flex;flex-direction:column;gap:12px;min-width:0}
+.actions h2{font-size:14px;line-height:20px;margin:0;overflow-wrap:anywhere}
+.actions strong.location{color:var(--warning)}
+.candidates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:0 3px}
+.candidate{border:1px solid var(--field);padding:0;height:32px;font-size:14px;min-width:0}
+.candidate[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.candidate:disabled{opacity:1;cursor:default}
+.actions button.primary,.actions button.danger{width:100%;min-height:40px}
+.chosen-order{font-size:12px;color:var(--sub);margin:0}
+.result{color:var(--accent);font-size:14px;font-weight:700;margin:1px 0;text-align:center}
+.result.expired-text{color:#7e540b}
+.result.rejected-text{color:var(--warning)}
+.scan-data{font-size:14px;line-height:1.5;display:grid;gap:10px}
+.scan-data b{font-weight:700}
+.scan-data .code{color:var(--warning);display:block;font-weight:650;overflow-wrap:anywhere}
+.trace-block{background:#e3f1ef;padding:9px 10px;border-radius:7px;color:#47636a;font-size:12px;overflow-wrap:anywhere}
+.history-meta{color:var(--sub);font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.tools{display:flex;align-items:center;flex-wrap:wrap;gap:7px;color:var(--soft);font-size:12px;padding:13px 0 16px}
+.tools button{font-size:12px;padding:4px 7px}
+.tools [aria-pressed=true]{border-color:#5baca0;color:var(--accent);background:#ecf8f5}
+.toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%);background:#163a3b;color:white;border-radius:9px;padding:10px 15px;z-index:5;max-width:calc(100vw - 28px);box-shadow:0 5px 15px #05232330}
+.toast[data-kind=error]{background:#7e2d38}
+dialog{color:var(--ink);border:0;border-radius:13px;max-width:min(92vw,550px);padding:24px}
+dialog h2{margin:0 0 10px}
+dialog::backdrop{background:#0d202b82}
+.modal-actions,.lightbox-top{display:flex;gap:9px;align-items:center;justify-content:flex-end;margin-top:16px}
+.lightbox{max-width:94vw;max-height:93vh;width:min(1120px,94vw);padding:14px}
+.lightbox-top{justify-content:space-between;margin:0 0 10px}
+.lightbox img{width:100%;max-height:78vh;object-fit:contain;display:block}
+[data-mode=day] body{padding-top:14px}
+.brand strong{text-shadow:0 1px 4px #182821}
+.trace-block{background:var(--teal-soft);color:var(--sub);padding:6px 16px}
+.scan-data,.history-meta{font-size:12px;line-height:18px}
+.range-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.range-inputs input{font-size:12px}
+.month-nav{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:12px;margin:12px 0}
+.month-nav button,.calendar button{border:0}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center;align-items:center;gap:2px}
+.calendar span{font-size:12px;color:var(--sub)}
+.calendar button{padding:0;height:29px}
+.calendar button[aria-pressed=true]{background:var(--accent);color:white}
+.calendar button.in-range{background:var(--teal-soft)}
+@supports (appearance:base-select){select,::picker(select){appearance:base-select}
+::picker(select){border:1px solid var(--field);border-radius:8px;padding:6px;background:white}
+option{min-height:34px;padding:0 10px;border-radius:5px}
+option:checked{background:var(--teal-soft);color:var(--accent)}
+option::checkmark{display:none}
+#store::picker(select){min-width:min(310px,90vw)}}
+@media(max-width:1180px){.filters{grid-template-columns:repeat(4,minmax(0,1fr))}
+.filters .views{max-width:220px}
+.evidence{grid-template-columns:minmax(180px,27fr) minmax(0,56fr) minmax(145px,17fr);gap:11px}
+.detail-identity h1{font-size:22px}
+.product-meta{margin-left:0}
+.candidates{gap:6px}
+.actions h2{font-size:15px}
+.actions{gap:8px}
+.queue-panel{min-height:calc(100dvh - 107px)}
+.big-timer{font-size:28px}}
+@media(max-width:760px){body{padding:8px 8px 0}
+.masthead{padding:0 12px;height:58px}
+.brand strong{font-size:15px}
+.operator{font-size:10px;gap:4px}
+.operator span{padding:0}
+main{margin-top:8px}
+.panel{padding:12px}
+.filters{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}
+.views{grid-column:1/-1;width:210px}
+.task-card{width:260px;flex-basis:260px}
+.detail-head{gap:5px;flex-wrap:wrap}
+.detail-identity h1{font-size:18px}
+.rx{font-size:16px;padding:3px 12px}
+.product-meta{font-size:11px}
+.big-timer{font-size:19px;padding:3px 9px}
+.evidence{grid-template-columns:minmax(85px,1fr) minmax(0,2.2fr)}
+.actions{grid-column:1/-1}
+.candidates{grid-template-columns:repeat(8,minmax(0,1fr))}
+.detail{min-height:0}
+.queue-panel.expanded-queue{min-height:70vh}}
 .cards.card-grid{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,309px));
-  justify-content:space-between;
+  justify-content:start;
   align-content:start;
-  gap:10px 16px;
+  gap:12px 21px;
   min-height:0;
   max-height:max(180px,calc(100dvh - 222px));
   overflow:hidden auto;
@@ -36,31 +192,33 @@ main{max-width:1920px;margin:auto;padding:16px 16px 0}.panel{background:var(--pa
 <body>
 <header class="masthead">
   <img id="banner" class="banner" alt="">
-  <div class="brand"><span class="brand-icon" aria-hidden="true">▣</span><strong id="heading">夜深了，感谢你的辛苦付出</strong></div>
+  <div class="brand"><strong id="heading">夜间模式</strong></div>
   <div class="operator">全部穹彻门店 <span>·</span> 远程主控</div>
 </header>
 <main>
   <section id="queue-panel" class="panel queue-panel" aria-label="任务队列">
     <form id="filters" class="filters" role="search">
       <div class="views" aria-label="任务视图"><button type="button" id="current-view" aria-pressed="true">待处理任务</button><button type="button" id="all-history" aria-pressed="false">历史日志</button></div>
-      <label>销售平台<select id="platform"><option value="">全部平台</option><option>美团</option><option>京东</option><option>淘宝</option></select></label>
       <label>门店名称<select id="store"><option value="">全部门店</option></select></label>
+      <label>销售平台<select id="platform"><option value="">全部平台</option><option>美团</option><option>京东</option><option>淘宝</option></select></label>
       <label>任务类型<select id="type"><option value="">全部类型</option><option value="pick">分拣指认</option><option value="review">复核决策</option></select></label>
       <label>平台单号 / 流水号<span class="search-field"><input id="order" type="search" placeholder="输入完整单号或流水号"><span class="icon search-icon" aria-hidden="true"></span></span></label>
       <label>商品信息<span class="search-field"><input id="product" type="search" placeholder="品名 / 准字 / 条码"><span class="icon search-icon" aria-hidden="true"></span></span></label>
       <div class="time-field"><label for="range">发生时间范围</label><button type="button" id="range" class="range-trigger" popovertarget="range-panel"><span>开始时间 → 结束时间</span><span class="icon calendar-icon" aria-hidden="true"></span></button>
       <div id="range-panel" class="range-panel" popover>
         <strong>选择发生时间范围</strong>
-        <label>开始<input id="range-start" type="datetime-local"></label>
-        <label>结束<input id="range-end" type="datetime-local"></label>
+        <div class="range-inputs"><label>开始<input id="range-start" type="datetime-local"></label>
+        <label>结束<input id="range-end" type="datetime-local"></label></div>
+        <div class="month-nav"><button type="button" id="prev-month" aria-label="上个月">‹</button><strong id="month-label"></strong><button type="button" id="next-month" aria-label="下个月">›</button></div>
+        <div id="calendar" class="calendar"></div>
         <p id="range-error" role="status"></p>
         <div class="range-actions"><button type="button" id="clear-range">清空</button><button type="button" id="cancel-range">取消</button><button type="button" class="primary" id="apply-range">确定</button></div>
       </div></div>
     </form>
     <div id="cards" class="cards" tabindex="0" aria-label="横向任务列表"></div>
     <div id="queue-empty" class="empty" hidden></div>
+    <section id="detail" class="detail" aria-label="任务详情" hidden></section>
   </section>
-  <section id="detail" class="panel detail" aria-label="任务详情" hidden></section>
   <footer class="tools">
     <strong>演示工具</strong>
     <button data-mode="night">夜间模式</button><button data-mode="day">白天模式</button>
@@ -128,7 +286,7 @@ function ingest(event, requestedAt = Date.now()) {
 function previousRecords() {
   const records = [
     { ...story[0], id: 'TASK-790-01', order: '2631180000007101', serial: '101', picked: [3], status: 'accepted', requestedAt: lastNight(23, 17) },
-    { ...second, id: 'TASK-791-01', order: '2631180000007010', status: 'accepted', requestedAt: lastNight(23, 14), mismatch: false, scanned: base.barcode },
+    { ...second, id: 'TASK-791-01', medicineClass: 'OTC', order: '2631180000007010', status: 'accepted', requestedAt: lastNight(23, 14), mismatch: false, scanned: base.barcode },
     { ...second, id: 'TASK-792-01', order: '2631180000007011', serial: '11', status: 'timeout', requestedAt: lastNight(22, 58) },
     { ...second, id: 'TASK-793-01', order: '2631180000007012', serial: '12', status: 'reject', requestedAt: lastNight(22, 52) },
     { ...story[0], id: 'TASK-794-01', channel: '京东', order: '2631180000007013', serial: '13', status: 'timeout', requestedAt: lastNight(22, 48) },
@@ -187,7 +345,7 @@ function card(row) {
     <header class="card-top"><span class="badge platform" data-channel="${row.channel}">${row.channel}#${row.serial}</span><span class="badge">${kinds[row.kind]}</span>${statusChip(row)}</header>
     <strong class="card-store">${row.store}</strong>
     <span class="card-line">平台单号： ${row.order}</span>
-    <span class="card-line">商品信息： ${row.name} ${row.spec}</span>
+    ${selected ? '' : `<span class="card-line">商品信息： ${row.name} ${row.spec}</span>`}
     <span class="card-line">发生时间： ${datetime.format(row.requestedAt)}</span>
     ${selected ? '<button type="button" class="card-collapse" id="collapse">取消选择  ⌃</button>' : ''}
   </article>`;
@@ -217,10 +375,10 @@ function render({ reveal = false, resetScroll = false } = {}) {
   if (!state.selected && !state.collapsed) state.selected = rows[0]?.id ?? null;
   const showGrid = !state.selected;
   document.documentElement.dataset.mode = state.mode;
-  $('heading').textContent = state.mode === 'night' ? '夜深了，感谢你的辛苦付出' : '机器人工作台.白天模式';
+  $('heading').textContent = state.mode === 'night' ? '夜间模式' : '白日模式';
   const banner = state.mode === 'night' ? assets.nightBanner : assets.dayBanner;
   if ($('banner').getAttribute('src') !== banner) $('banner').src = banner;
-  $('current-view').textContent = state.mode === 'night' ? '待处理任务' : '昨夜日志';
+  $('current-view').textContent = state.mode === 'night' ? '待处理任务' : '昨夜已处理';
   $('current-view').setAttribute('aria-pressed', state.view === 'current');
   $('all-history').setAttribute('aria-pressed', state.view === 'all');
   document.querySelectorAll('.tools [data-mode]').forEach(button => button.setAttribute('aria-pressed', button.dataset.mode === state.mode));
@@ -289,7 +447,7 @@ function renderDetail() {
   const live = isLive(row);
   const branch = row.kind === 'pick' ? ['货架实拍图', assets.shelf] : ['实物对照图', row.mismatch ? assets.mismatch : assets.actual];
   el.innerHTML = `<header class="detail-head">
-    <div class="detail-identity"><span class="rx">RX</span><h1>[${row.sku}] ${row.name} ${row.spec}</h1>
+    <div class="detail-identity"><span class="rx" data-class="${row.medicineClass ?? 'RX'}">${row.medicineClass ?? 'RX'}</span><h1>[${row.sku}] ${row.name} ${row.spec}</h1>
     <span class="product-meta">${row.barcode || '未提供'} / ${row.maker} / ${row.approval}</span></div>
     ${live ? timer(row) : ''}</header>
     <div class="evidence">${gallery(row)}${photo(branch[0], branch[1], 'scene', row.kind === 'review' && !row.mismatch ? 'scene-photo matching-photo' : 'scene-photo')}
@@ -360,12 +518,64 @@ document.querySelectorAll('.tools [data-mode]').forEach(button => {
 $('range-panel').addEventListener('beforetoggle', event => {
   if (event.newState !== 'open') return;
   const b = $('range').getBoundingClientRect();
-  $('range-panel').style.left = Math.max(10, Math.min(b.left, innerWidth - 340)) + 'px';
-  $('range-panel').style.top = Math.max(10, Math.min(b.bottom + 5, innerHeight - 240)) + 'px';
+  const w = Math.min(378, innerWidth - 20);
+  $('range-panel').style.left = Math.max(10, Math.min(b.left, innerWidth - w - 10)) + 'px';
+  $('range-panel').style.top = Math.max(10, Math.min(b.bottom + 5, innerHeight - 450)) + 'px';
   $('range-start').value = state.range.startText ?? '';
   $('range-end').value = state.range.endText ?? '';
   $('range-error').textContent = '';
+  calendarField = 'range-start';
+  monthCursor = new Date(state.range.start ?? Date.now());
+  drawCalendar();
 });
+let monthCursor = new Date();
+let calendarField = 'range-start';
+function drawCalendar() {
+  const year = monthCursor.getFullYear(), month = monthCursor.getMonth();
+  $('month-label').textContent = year + ' 年 ' + (month + 1) + ' 月';
+  const cell = document.createDocumentFragment();
+  for (const weekday of '一二三四五六日') {
+    const label = document.createElement('span');
+    label.textContent = weekday;
+    cell.append(label);
+  }
+  const offset = (new Date(year, month, 1).getDay() + 6) % 7;
+  for (let i = 0; i < offset; i++) cell.append(document.createElement('span'));
+  const first = $('range-start').value.slice(0, 10), last = $('range-end').value.slice(0, 10);
+  for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
+    const date = [year, String(month + 1).padStart(2, '0'), String(day).padStart(2, '0')].join('-');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.date = date;
+    button.textContent = day;
+    button.setAttribute('aria-label', date);
+    button.setAttribute('aria-pressed', date === first || date === last);
+    if (first && last && date > first && date < last) button.className = 'in-range';
+    cell.append(button);
+  }
+  $('calendar').replaceChildren(cell);
+}
+for (const field of ['range-start', 'range-end']) {
+  $(field).onfocus = () => { calendarField = field; };
+  $(field).oninput = () => {
+    if ($(field).value) monthCursor = new Date($(field).value);
+    drawCalendar();
+  };
+}
+function moveMonth(offset) {
+  monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth() + offset, 1);
+  drawCalendar();
+}
+$('prev-month').onclick = () => moveMonth(-1);
+$('next-month').onclick = () => moveMonth(1);
+$('calendar').onclick = event => {
+  const date = event.target.closest('[data-date]')?.dataset.date;
+  if (!date) return;
+  const field = $(calendarField);
+  field.value = date + 'T' + (field.value.slice(11) || (calendarField === 'range-start' ? '00:00' : '23:59'));
+  calendarField = calendarField === 'range-start' ? 'range-end' : 'range-start';
+  drawCalendar();
+};
 function applyRange(clear = false) {
   const startText = clear ? '' : $('range-start').value;
   const endText = clear ? '' : $('range-end').value;
